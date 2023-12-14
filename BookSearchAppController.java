@@ -416,6 +416,7 @@ public class BookSearchAppController implements Initializable {
    protected void previousBookClick(ActionEvent event) {
       docsPos--;
       updateQuery(lastSearch);
+      System.out.println(search.getDocs()[(docsPos % LIMIT)].toString());
       displayBookInfo(search.getDocs()[(docsPos % LIMIT)]);
    }
    
@@ -423,6 +424,7 @@ public class BookSearchAppController implements Initializable {
    protected void nextBookClick(ActionEvent event) {
       docsPos++;
       updateQuery(lastSearch);
+      System.out.println(search.getDocs()[(docsPos % LIMIT)].toString());
       displayBookInfo(search.getDocs()[(docsPos % LIMIT)]);
    }
    
