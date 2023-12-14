@@ -52,7 +52,7 @@
                   <Image url="@Many_Old_books.jpg" />
                </image>
             </ImageView>
-            <MenuButton fx:id="langMenu" layoutX="695.0" layoutY="11.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" style="-fx-background-color: brown;" text="Languages" textFill="#f2ecec">
+            <MenuButton fx:id="langMenu" layoutX="695.0" layoutY="11.0" mnemonicParsing="false" onAction="#setLanguage" prefHeight="25.0" prefWidth="91.0" style="-fx-background-color: brown;" text="Languages" textFill="#f2ecec">
               <items>
                 <MenuItem fx:id="english" mnemonicParsing="false" onMenuValidation="#setLanguage" text="English" />
                   <MenuItem fx:id="georgian" mnemonicParsing="false" onMenuValidation="#setLanguage" text="ქართული" />
@@ -80,7 +80,7 @@
                </font>
             </Label>
             <TextField fx:id="authorInput" layoutX="315.0" layoutY="173.0" onAction="#handleUserInput" onInputMethodTextChanged="#handleUserInput" prefHeight="25.0" prefWidth="149.0" promptText="Enter text here..." />
-            <Button fx:id="searchButton" layoutX="358.0" layoutY="211.0" mnemonicParsing="false" onMouseClicked="#runQuery" text="Search" textFill="#070707">
+            <Button fx:id="searchButton" layoutX="358.0" layoutY="211.0" mnemonicParsing="false" onAction="#switchSceneResults" onMouseClicked="#runQuery" text="Search" textFill="#070707">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

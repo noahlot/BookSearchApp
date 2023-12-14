@@ -18,17 +18,17 @@
       <TextField fx:id="yearPublished" editable="false" layoutX="219.0" layoutY="294.0" promptText="Publication Year" />
       <TextField fx:id="authorName" editable="false" layoutX="219.0" layoutY="326.0" promptText="Author's Name" />
       <ImageView fx:id="coverImg" fitHeight="219.0" fitWidth="210.0" layoutX="190.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="7.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#goBack" prefHeight="10.0" prefWidth="65.0" style="-fx-background-color: brown;" text="Go Back" textFill="#fcf8f8">
+      <Button fx:id="goBackButton" layoutX="7.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#goBack" prefHeight="10.0" prefWidth="65.0" style="-fx-background-color: brown;" text="Go Back" textFill="#fcf8f8">
          <font>
             <Font name="System Bold" size="11.0" />
          </font>
       </Button>
-      <Button layoutX="14.0" layoutY="421.0" mnemonicParsing="false" onMouseClicked="#previousBookClick" style="-fx-background-color: brown; -fx-border-color: s;" text="Previous Book" textFill="#f2f0f0">
+      <Button fx:id="prevBook" layoutX="14.0" layoutY="421.0" mnemonicParsing="false" onMouseClicked="#previousBookClick" style="-fx-background-color: brown; -fx-border-color: s;" text="Previous Book" textFill="#f2f0f0">
          <font>
             <Font name="System Bold" size="9.0" />
          </font>
       </Button>
-      <Button layoutX="520.0" layoutY="421.0" mnemonicParsing="false" onMouseClicked="#nextBookClick" prefHeight="19.0" prefWidth="65.0" style="-fx-background-color: brown;" text="Next Book" textFill="#f8f6f6">
+      <Button fx:id="nextBook" layoutX="520.0" layoutY="421.0" mnemonicParsing="false" onMouseClicked="#nextBookClick" prefHeight="19.0" prefWidth="65.0" style="-fx-background-color: brown;" text="Next Book" textFill="#f8f6f6">
          <font>
             <Font name="System Bold" size="9.0" />
          </font>

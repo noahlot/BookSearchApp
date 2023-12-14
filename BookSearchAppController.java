@@ -140,6 +140,13 @@ public class BookSearchAppController implements Initializable {
    @FXML
    private TextField authorName;
    
+   @FXML
+   private Button goBackButton;
+   @FXML
+   private Button prevBook;
+   @FXML
+   private Button nextBook;
+   
    // Variables for internal use within Controller
    
    /**
@@ -185,6 +192,7 @@ public class BookSearchAppController implements Initializable {
     */
    public static final String LANG_PREF = "lang_pref_key";
    
+   
    // Variables for setting up/switching between scenes
    protected Stage stage;
    protected Scene scene;
@@ -201,8 +209,11 @@ public class BookSearchAppController implements Initializable {
    @FXML
    protected void handleUserInput(ActionEvent event) {
          if (event.getSource() == keyInput) keyInputText = this.keyInput.getText();
+         System.out.println(this.keyInput.getText());
          if (event.getSource() == yearInput) yearInputText = this.yearInput.getText();
+         System.out.println(this.yearInput.getText());
          if (event.getSource() == authorInput) authorInputText = this.authorInput.getText();
+         System.out.println(this.authorInput.getText());
    }
    
    /**
@@ -278,18 +289,17 @@ public class BookSearchAppController implements Initializable {
       if (docsPos >= LIMIT) {
          String offset = "&offset=" + ((docsPos / LIMIT) * LIMIT);
          try {
-            this.runQuery(lastSearch.concat(offset));
+            this.runQueryFromString(lastSearch.concat(offset));
          } catch (IOException e) {
             System.out.println("Error updating query");
          }
       }
    }
    /**
-    * The runQuery method will run whenever the search button on the first page
-    * is pressed. It also switches from the search page to the results page.
+    * The runQuery method will send a request to the API for book info.
     */
    @FXML
-   protected void runQuery(ActionEvent event) throws IOException {
+   protected void runQuery() throws IOException {
       System.out.println("Start of runQuery()"); // TEST
       // create http client if it doesn't already exist
       if(this.client == null) this.client = HttpClient.newHttpClient();
@@ -307,31 +317,19 @@ public class BookSearchAppController implements Initializable {
          HttpResponse response = this.client.send(request, BodyHandlers.ofString());
          this.search = gson.fromJson(response.body().toString(), Search.class);
          this.lastSearch = queryURI.toString();
+         System.out.println(this.lastSearch);
       } catch(InterruptedException e) { 
             System.out.println("Interrupted exception");
           }
-      // switch to other scene (this code for switching between scenes is adapted
-      // from a tutorial here: https://youtu.be/hcM-R-YOKkQ?si=2ejYWJaA0FOwRghX
-      try {
-         System.out.println("before scene switch"); // TEST
-         root = FXMLLoader.load(getClass().getResource("searchResults.fxml"));
-         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-         scene = new Scene(root);
-         displayBookInfo(search.getDocs()[(docsPos % LIMIT)]);
-         stage.setScene(scene);
-         stage.show();      
-         System.out.println("after scene switch");
-      } catch (IllegalArgumentException e) {
-         System.out.println("Illegal argument exception");
-      }
    }
+   
+   
    
    /**
     * This runQuery method can be run without a button press or other action,
     * but serves the same purpose. It doesn't switch the scene.
     */
-   @FXML
-   protected void runQuery(String query) throws IOException {
+   protected void runQueryFromString(String query) throws IOException {
       // create http client if it doesn't already exist
       if(this.client == null) this.client = HttpClient.newHttpClient();
       URI queryURI = null;
@@ -351,7 +349,30 @@ public class BookSearchAppController implements Initializable {
       } catch(Exception e) { 
             System.out.println("Invalid URL for API request");
           }
-   }   
+   }
+   
+   @FXML
+   public void switchSceneResults(ActionEvent event) throws Exception {
+      // switch to other scene (this code for switching between scenes is adapted
+      // from a tutorial here: https://youtu.be/hcM-R-YOKkQ?si=2ejYWJaA0FOwRghX
+      try {
+         System.out.println("before scene switch"); // TEST
+         this.runQuery();
+         root = FXMLLoader.load(getClass().getResource("SearchResults.fxml"));
+         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+         scene = new Scene(root);
+         stage.setScene(scene);
+         stage.show();
+         Thread.sleep(1000);
+         
+         System.out.println(docsPos % LIMIT);
+         System.out.println(search.getDocs()[0].toString());
+         System.out.println("after scene switch"); // TEST
+         displayBookInfo(search.getDocs()[(docsPos % LIMIT)]);
+      } catch (IllegalArgumentException e) {
+         System.out.println("Illegal argument exception");
+      }  
+   }  
    
    /**
     * This method goes back to the search page when the back button is clicked.
@@ -360,11 +381,14 @@ public class BookSearchAppController implements Initializable {
    protected void goBack(ActionEvent event) throws IOException {
       // switch to other scene (this code for switching between scenes is adapted
       // from a tutorial here: https://youtu.be/hcM-R-YOKkQ?si=2ejYWJaA0FOwRghX
-      root = FXMLLoader.load(getClass().getResource("bookLibraryApp.fxml"));
+      try {
+      root = FXMLLoader.load(getClass().getResource("BookLibraryApp.fxml"));
       stage = (Stage)((Node)event.getSource()).getScene().getWindow();
       scene = new Scene(root);
       stage.setScene(scene);
-      stage.show();
+      stage.show(); } catch (Exception e) {
+         System.out.println("Unable to return to initial search page");
+      }
    }
    
    /**
@@ -372,7 +396,7 @@ public class BookSearchAppController implements Initializable {
     */
    @FXML
    protected void displayBookInfo(Book book) {
-      String coverURLString = 
+      /*String coverURLString = 
          String.format("https://covers.openlibrary.org/a/id/%s.jpg",
                         book.getCoverID());
       //URI coverURL = new URI(coverURLString);
@@ -382,7 +406,7 @@ public class BookSearchAppController implements Initializable {
       } catch (Exception e) { 
             System.out.println("Unable to load cover art");
       }
-      
+      */
       bookTitle.setText(book.getTitle());
       yearPublished.setText(book.getYearForView());
       authorName.setText(book.getAuthorForView());
@@ -412,7 +436,7 @@ public class BookSearchAppController implements Initializable {
       authorInputText = null;
       lastSearch = null;
       docsPos = 0;
-      
+            
       Preferences p = Preferences.userNodeForPackage(BookSearchAppController.class);
       p.get(LANG_PREF, "eng");
    }
