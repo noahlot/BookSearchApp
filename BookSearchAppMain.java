@@ -20,7 +20,6 @@ public class BookSearchAppMain extends Application {
    @Override
    public void start(Stage stage) throws Exception
    {
-      FXMLLoader.load(getClass().getResource("test.fxml"));
       // Adapted from Weather App sample project
       // Load the GUI from FXML built in Scene Builder
       Parent root = FXMLLoader.load(getClass().getResource("BookLibraryApp.fxml"));    
