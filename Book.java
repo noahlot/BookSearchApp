@@ -57,11 +57,11 @@
    }
     
    /**
-    * This parses data from the author_name array and returns a formatted String
+    * This getAuthors method parses data from the author_name array and returns a formatted String
     * which contains these author's names (or just one name if there's only one author).
-    * @return Formatted string with author name(s).
+    * @return Formatted string with author name(s) for use with other methods.
     */
-   public String getAuthorString() {
+   public String getAuthors() {
       // if no author names are listed, return null
       if (this.getAuthorNames() == null) return null;
       
@@ -98,33 +98,57 @@
       return cover_i;
    }
    
-   // Other methods
+   // Other methods (toString and those used for app view)
+   
+   /**
+    * The getYearForView method returns the string to be used within the view
+    * of the app for the first publication year, without combining it with other
+    * data or adding newline characters. If the year is not listed, it returns
+    * "Publication Year not Listed".
+    * @return String with the year in which the book was published, for use in app view.
+    */
+   public String getYearForView() {
+      // check that publication year is not null
+      if (this.getPublishYear() != null) {
+         // return publication year
+         return String.format("Published in %d", this.getPublishYear());
+      }
+      // if year not listed, return "Publication Year not Listed"
+      else return "Publication Year not Listed";
+   }
+   /**
+    * The getAuthorForView method returns the string to be used within the view
+    * of the app for the author names, without combining it with other
+    * data or adding newline characters. If no author is listed, it returns
+    * "Author not Listed". If more than one is listed, all names are returned.
+    * @return String with author name(s)/data, for use in app view.
+    */
+   public String getAuthorForView() {
+      // check that author is not null
+      if (this.getAuthors() != null) {
+         return String.format("Written by %s", this.getAuthors());
+      }
+      // if no author names are listed, return "Author not Listed"
+      else return "Author not Listed";
+   }
+   /**
+    *
+    *
+    */
    
    /**
     * The toString method returns a formatted String of information on a given book,
     * specifically the title, initial publication year, and author(s).
+    * Modified to call other methods 
     * @return Formatted string of book info.
     */
    public String toString() {
       // create StringBuilder
       StringBuilder bookInfo = new StringBuilder();
-      // add title
+      // add title, year published, and author
       bookInfo.append(this.getTitle());
-      
-      // check that publication year is not null
-      if (this.getPublishYear() != null) {
-         // add publication year
-         bookInfo.append(String.format("%nPublished in %d", this.getPublishYear()));
-      }
-      // if year not listed, add "Publication Year not Listed"
-      else bookInfo.append("\nPublication Year not Listed");
-      
-      // check that author is not null
-      if (this.getAuthorString() != null) {
-         bookInfo.append(String.format("%nWritten by %s", this.getAuthorString()));
-      }
-      // if no author names are listed, add "Author not Listed"
-      else bookInfo.append("\nAuthor not Listed");
+      bookInfo.append("\n" + this.getYearForView());
+      bookInfo.append("\n" + this.getAuthorForView());
       
       return bookInfo.toString();
    }
